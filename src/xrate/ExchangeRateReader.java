@@ -1,11 +1,34 @@
 package xrate;
 
+import java.net.*;
+import java.io.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserCOnfiguration Exception;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+
+
 /**
  * Provide access to basic currency exchange rate services.
  * 
- * @author PUT YOUR TEAM NAME HERE
+ * @author Sungjae Park
  */
 public class ExchangeRateReader {
+
+	public string baseURLcurrency;
+
 
     /**
      * Construct an exchange rate reader using the given base URL. All requests
@@ -19,7 +42,8 @@ public class ExchangeRateReader {
      *            the base URL for requests
      */
     public ExchangeRateReader(String baseURL) {
-        // TODO Your code here
+	   this.baseURLcurrency = baseURL;
+
     }
 
     /**
@@ -40,7 +64,10 @@ public class ExchangeRateReader {
      * @throws SAXException
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) {
-        // TODO Your code here
+        
+	    String monthString = ""+month
+
+
         throw new UnsupportedOperationException();
     }
 
