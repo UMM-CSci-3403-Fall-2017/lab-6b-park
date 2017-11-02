@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserCOnfiguration Exception;
+import javax.xml.parsers.ParserCOnfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,9 +63,27 @@ public class ExchangeRateReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public float getExchangeRate(String currencyCode, int year, int month, int day) {
+    public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException, ParserConfigurationException, SAXException {
+
+	    String year = ("" + year);
+	    String month = ("" + month);
+	    String day = ("" + day);
+		
+	    	
+	    if(month < 10) {
+		    month = "0" + month;
+	    }
+
+	    if (day < 10) {
+		    day = "0" + day;
+	    }
+
+
+
+
+
         
-	    String monthString = ""+month
+	    
 
 
         throw new UnsupportedOperationException();
