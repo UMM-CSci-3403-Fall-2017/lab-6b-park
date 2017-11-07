@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserCOnfigurationException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
  */
 public class ExchangeRateReader {
 
-	public string baseURLcurrency;
+	public String baseURLcurrency;
 
 
     /**
@@ -82,27 +82,31 @@ public class ExchangeRateReader {
 
 	    if (day < 10) {
 		    Day = "0" + day;
-		    
+	    
 	    }
-	    
-	    String exchangerate = baseURL + Year + "/" + Month + "/" + Day + ".xml";
-	    System.out.println(exchangerate);
 
-	    float Errors = 0;
 	    
-	    try {
-		    this.url = new URL(exchangerate); 
-		    this.xmlStream = url.openStream();
-		    
-		    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder db = dbf.newDocumentBuilder();
-		    Document doc = db.parse(new URL(exchangerate).openStream());
-		    
-		    doc.getDocumentElement().normalize();
-		    NodeList lists = doc.getElementsByTagName("fx");
-		    Node ExcahngeCurrency;
-		    
-		    for(int i = 0; i < nl.getLength(); i++) {
+	    
+	    String exchangerate = baseURLcurrency + Year + "/" + Month + "/" + Day + ".xml";
+	    System.out.println(exchangerate);
+	   //
+
+
+
+	    float Errors = -1;
+	    
+	    URL exchangerateURL = new URL(exchangerate); 
+	    InputStream xmlStream = exchangerateURL.openStream();   
+	    
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    Document doc = db.parse(xmlStream);  
+	    doc.getDocumentElement().normalize();
+
+	    NodeList lists = doc.getElementsByTagName("fx");
+	   // Node ExchangeCurrency = doc.getElementByTagName("rate");
+	    
+	 /**   for(int i = 0; i < nl.getLength(); i++) {
 		    ExchangeCurrency = lists.item(i);
 		    NodeList Subgroups = ExchangeCurrency.getChildNodes();
 		    Node CC = ExchangeCurrency.item(1);
@@ -114,7 +118,27 @@ public class ExchangeRateReader {
 		    }
 	    }
 	    return Errors;
-    }
+    } 
+
+    */
+
+	    for(int i = 0; i < lists.getLength(); i++) {
+		    Node ExchangeCurrency = lists.item(i);
+		    NodeList Subgroups = ExchangeCurrency.getChildNodes();
+		    Node CountryCode = Subgroups.item(i);
+
+		    if(currencyCode.equals(CountryCode.getTextContent())){
+			    Node rateExchange = Subgroups.item(3);
+			    Errors = new Float(rateExchange.getTextContext());
+			    break;
+		    }
+	    }
+
+	    return Errors;
+}
+
+
+
 
     /**
      * Get the exchange rate of the first specified currency against the second
@@ -135,11 +159,13 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String fromCurrency, String toCurrency, int year, int month, int day) 
 		    throws ParserConfigurationException, SAXException, IOException {
-        float here = this.getExchangeRate(fromCurrenct, year, month, day);
-	float destiantion  = this.getExchangeRate(toCurrency, year, month, day);
+        float here = this.getExchangeRate(fromCurrency, year, month, day);
+	float destination  = this.getExchangeRate(toCurrency, year, month, day);
+	
 	return here/destination;
-    }
+
+
 
     }
-
+}
 
