@@ -150,4 +150,6 @@ public class ExchangeRateReader {
 	float destiantion  = this.getExchangeRate(toCurrency, year, month, day);
 	return here/destination;
     }
-}
+
+    }
+
