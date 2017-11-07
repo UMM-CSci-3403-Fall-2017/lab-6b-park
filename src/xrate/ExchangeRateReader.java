@@ -3,6 +3,10 @@ package xrate;
 import java.net.*;
 import java.io.*;
 
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URLConnection;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,27 +67,64 @@ public class ExchangeRateReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException, ParserConfigurationException, SAXException {
+    public float getExchangeRate(String currencyCode, int year, int month, int day) 
+		    
+		    throws IOException, ParserConfigurationException, SAXException {
 
-	    String year = ("" + year);
-	    String month = ("" + month);
-	    String day = ("" + day);
+	    String Year = "" + year;
+	    String Month = "" + month;
+	    String Day = "" + day;
 		
 	    	
 	    if(month < 10) {
-		    month = "0" + month;
+		    Month = "0" + month;
 	    }
 
 	    if (day < 10) {
-		    day = "0" + day;
+		    Day = "0" + day;
+		    
 	    }
+	    
+	    String exchangerate = baseURL + Year + "/" + Month + "/" + Day + ".xml";
+	    System.out.prinln(exchangerate);
 
+	    float Errors;
+	    
+	    try {
+	    this.url = new URL(exchangerate);
+	    this.xmlStream = url.openStream();
 
-        
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    Document doc = db.parse(new URL(exchangerate).openStream());
+
+	    doc.getDocumentElement().normalize();
+	    NodeList lists = doc.getElementsByTagName("fx");
+	    Node ExcahngeCurrency;
+
+	    for(int i = 0; i < nl.getLength(); i++) {
+		    ExchangeCurrency = lists.item(i);
+		    NodeList Subgroups = ExchangeCurrency.getChildNodes();
+		    Node CC = ExchangeCurrency.item(1);
+
+		    if(currencyCode.equals(CC.getTextContent())) {
+			    Node RATES = Subgroups.item(3);
+			    Errors = new Float(RATES.getTextContent());
+			    break;
+		    }
+	    }
+	    return Errors;
 	    
 
 
-        throw new UnsupportedOperationException();
+			   
+
+
+
+	    
+
+
+       // throw new UnsupportedOperationException();
     }
 
     /**
@@ -103,10 +144,10 @@ public class ExchangeRateReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public float getExchangeRate(
-            String fromCurrency, String toCurrency,
-            int year, int month, int day) {
-        // TODO Your code here
-        throw new UnsupportedOperationException();
+    public float getExchangeRate(String fromCurrency, String toCurrency, int year, int month, int day) 
+		    throws ParserConfigurationException, SAXException, IOException {
+        float here = this.getExchangeRate(fromCurrenct, year, month, day);
+	float destiantion  = this.getExchangeRate(toCurrency, year, month, day);
+	return here/destination;
     }
 }
