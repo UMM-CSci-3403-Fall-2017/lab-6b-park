@@ -86,23 +86,23 @@ public class ExchangeRateReader {
 	    }
 	    
 	    String exchangerate = baseURL + Year + "/" + Month + "/" + Day + ".xml";
-	    System.out.prinln(exchangerate);
+	    System.out.println(exchangerate);
 
-	    float Errors;
+	    float Errors = 0;
 	    
 	    try {
-	    this.url = new URL(exchangerate);
-	    this.xmlStream = url.openStream();
-
-	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	    DocumentBuilder db = dbf.newDocumentBuilder();
-	    Document doc = db.parse(new URL(exchangerate).openStream());
-
-	    doc.getDocumentElement().normalize();
-	    NodeList lists = doc.getElementsByTagName("fx");
-	    Node ExcahngeCurrency;
-
-	    for(int i = 0; i < nl.getLength(); i++) {
+		    this.url = new URL(exchangerate); 
+		    this.xmlStream = url.openStream();
+		    
+		    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder db = dbf.newDocumentBuilder();
+		    Document doc = db.parse(new URL(exchangerate).openStream());
+		    
+		    doc.getDocumentElement().normalize();
+		    NodeList lists = doc.getElementsByTagName("fx");
+		    Node ExcahngeCurrency;
+		    
+		    for(int i = 0; i < nl.getLength(); i++) {
 		    ExchangeCurrency = lists.item(i);
 		    NodeList Subgroups = ExchangeCurrency.getChildNodes();
 		    Node CC = ExchangeCurrency.item(1);
@@ -114,17 +114,6 @@ public class ExchangeRateReader {
 		    }
 	    }
 	    return Errors;
-	    
-
-
-			   
-
-
-
-	    
-
-
-       // throw new UnsupportedOperationException();
     }
 
     /**
@@ -152,4 +141,5 @@ public class ExchangeRateReader {
     }
 
     }
+
 
