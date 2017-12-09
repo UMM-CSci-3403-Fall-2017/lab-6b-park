@@ -69,8 +69,8 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException, ParserConfigurationException, SAXException {
 	    
-	    float rate = 0;
-	    String Year = baseURL + Integer.toString(year) + "/";
+	   // float rate = 0;
+	    String url = baseURL + Integer.toString(year) + "/";
 	    String Month = Integer.toString(month) + "/";
 	    String Day = Integer.toString(day);
 
@@ -87,34 +87,33 @@ public class ExchangeRateReader {
 	    //create URL
 
 
-	    String url = url + Year + Month + Day + ".xml";
+	    url = url + Month + Day + ".xml";
 	    URL newURL = new URL(url);
 	    InputStream xmlStream = newURL.openStream();
 
 	   // String exchangerate = baseURLcurrency + Year + "/" + Month + "/" + Day + ".xml";
 	   // System.out.println(exchangerate);
 
-	    DocumentBuilderFactory dbf = DocumnetBuilderFactory.newInstance();
-	    DocumentBuilderFacotry db = dbf.newDocumentBuilder();
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder db = dbf.newDocumentBuilder();
 	    Document doc = db.parse(xmlStream);
 	    doc.getDocumentElement().normalize();
 
 	    //create nodeList
 
-	    NodeList exchange = doc.getElementsByTagName("currency_code");
+	    NodeList currency = doc.getElementsByTagName("currency_code");
 	    NodeList rates = doc.getElementsByTagName("rate");
 
 	    float returns = Float.MIN_VALUE;
-	    for(int i = 0; i < codes.getLength(); i++) {
-		    if(codes.item(i).getNodeType() == codes.item(i).ELEMENT_NODE) {
-			    if(currencycode.equals(code.item(i).getTextContent())) {
+	    for(int i = 0; i < currency.getLength(); i++) {
+		    if(currency.item(i).getNodeType() == currency.item(i).ELEMENT_NODE) {
+			    if(currencyCode.equals(currency.item(i).getTextContent())) {
 				    returns = new Float(rates.item(i).getTextContent());
 			    }
 		    }
 	    }
-	    return returns
+	    return returns;
     }
-
 
 /*
 
@@ -185,7 +184,7 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String fromCurrency, String toCurrency, int year, int month, int day) throws ParserConfigurationException, SAXException, IOException {
 
-	    String Year = baseURL + Integer.toString(year) + "/";
+	    String url = baseURL + Integer.toString(year) + "/";
 	    String Month = Integer.toString(month) + "/";
 	    String Day = Integer.toString(day);
 
@@ -197,19 +196,19 @@ public class ExchangeRateReader {
 		    Day = "0" + Integer.toString(day);
 	    }
 
-	    String url = url + Month + Day + ".xml";
+	    url = url + Month + Day + ".xml";
 
 	    URL newURL = new URL(url);
 	    InputStream xmlStream = newURL.openStream();
 
 	    //make documents
 	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	    DocumentBuilder db = docBuilderFactory.newDocumentBuilder();
-	    Document doc = docBuilder.parse(xmlStream);
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    Document doc = db.parse(xmlStream);
 	    doc.getDocumentElement().normalize();
 
 	    float returns = Float.MIN_VALUE;
-	    float rates = Float.MIN_VALUE;
+	    float Rates = Float.MIN_VALUE;
 	    float others = Float.MIN_VALUE;
 
 	    // make nodelists
@@ -222,14 +221,14 @@ public class ExchangeRateReader {
 	    for(int i = 0; i < currency.getLength(); i++) {
 		    if(currency.item(i).getNodeType() == currency.item(i).ELEMENT_NODE) {
 			    if(fromCurrency.equals(currency.item(i).getTextContent())){
-				    rates = new Float(rates.item(i).getTextContent());
+				    Rates = new Float(rates.item(i).getTextContent());
 			    }
-			    if(toCurrency.equals(codes.item(i).getTextContenct())){
+			    if(toCurrency.equals(currency.item(i).getTextContent())){
 				    others = new Float(rates.item(i).getTextContent());
 			    }
 		    }
 	    }
-	    returns = rates/others;
+	    returns = Rates/others;
 
 	    return returns;
 
